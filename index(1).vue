@@ -14,14 +14,13 @@
       </div>
       <el-form-item prop="mobile">
         <span class="svg-container el-icon-user-solid" />
-        <!-- v-model="loginForm.mobile"给定默认的手机号  并绑定响应式数据绑定 -->
         <el-input v-model="loginForm.mobile" placeholder="请输入手机号" />
       </el-form-item>
+
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <!--  v-model="loginForm.password"双向绑定密码的响应式 -->
         <el-input
           ref="pwdInput"
           v-model="loginForm.password"
@@ -30,7 +29,6 @@
         />
 
         <span class="svg-container">
-          <!--@click="pwdClick"通过点击事件拿到type类型  -->
           <svg-icon
             :icon-class="`${passwordType === 'password' ? 'eye' : 'eye-open'}`"
             @click="pwdClick"
@@ -39,12 +37,12 @@
       </el-form-item>
 
       <el-button
-        :loading="false"
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click="login"
         >Login</el-button
       >
+
       <div class="tips">
         <span style="margin-right: 20px">账号: 13800000002</span>
         <span> 密码: 123456</span>
@@ -54,8 +52,7 @@
 </template>
 
 <script>
-// !引入封装的正则组件 具体的使用方法如下
-import { validMobile, validUsername } from '@/utils/validate'
+import { validMobile } from '@/utils/validate'
 export default {
   name: 'Login',
   data () {
@@ -63,24 +60,20 @@ export default {
       if (validMobile(value)) {
         return callback()
       }
-      // todo callback函数
+
       return callback(new Error('手机号格式不对'))
     }
     return {
       loginForm: {
         mobile: '13800000002',
-        password: '123456',
-        loading: false
+        password: '123456'
       },
       passwordType: 'password',
       rules: {
         mobile: [
           { required: true, message: '手机号必填', trigger: 'blur' },
-          // todo  直接在内部
-          { pattern: /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[189]))\d{8}$/, message: '手机号格式', trigger: 'blur' }
-          // todo 从封装的组件直接拿取
-          // { validator: validMobilePhone, trigger: 'blur' },
-          // { validator: validMobilePhone, trigger: 'blur' }
+          // { pattern: /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[189]))\d{8}$/, message: '手机号格式', trigger: 'blur' }
+          { validator: validMobilePhone, trigger: 'blur' }
         ],
         password: [
           { required: true, message: '密码必填', trigger: 'blur' },
@@ -105,12 +98,8 @@ export default {
       // } )
       try {
         await this.$refs.loginForm.validate()
-        await this.$store.dispatch('user/login', this.loginForm)
-        this.$router.push('/')
       } catch (e) {
         console.log(e)
-      } finally {
-        this.loading = true
       }
     }
   }
@@ -131,7 +120,7 @@ $cursor: #fff;
   }
 }
 
-/*配置的el组件的样式 element-ui css */
+/* reset element-ui css */
 .login-container {
   .el-input {
     display: inline-block;
